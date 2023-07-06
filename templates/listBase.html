@@ -1,0 +1,80 @@
+{% extends 'body.html' %}
+{% load static %}
+
+
+{% block head %}
+
+<link href="{% static 'libs/DataTableLib/DataTables-1.13.4/css/jquery.dataTables.min.css'%}" rel="stylesheet"/>
+<link href="{% static 'libs/DataTableLib/Buttons-2.3.6/css/buttons.dataTables.min.css'%}" rel="stylesheet"/>
+<link href="{% static 'libs/DataTableLib/Responsive-2.4.1/css/responsive.dataTables.min.css'%}" rel="stylesheet"/>
+<link href="{% static 'libs/DataTableLib/Scroller-2.1.1/css/scroller.dataTables.min.css'%}" rel="stylesheet"/>
+
+
+{% endblock head %}
+
+{% block head_list %}
+
+{% endblock head_list %}
+
+{% block content %}
+<!-- Shopping cart table -->
+<div class="table-responsive">
+  <div class="m-4 d-flex justify-content-between">
+    <!--
+      <div class="d-flex">
+        <div class="mr-2"><a href="{% url 'home' %}" class="tretched-link">Inicio</a></div>
+        <div class="mr-2"><a href="{% url 'producto:Producto_list' %}" class="tretched-link">Producto</a></div>
+        <div class="mr-2"><a href="{% url 'producto:Categoria_list' %}" class="tretched-link">Categorias</a></div>
+      </div>
+    -->
+
+    {% block button_list %}
+      <div class="">
+        <a href="{{create_url}}" id="button-addon3"  class="btn btn-dark px-4 rounded-pill"><i class="fa fa-plus mr-2"></i>Agregar</a>
+      </div>
+    {% endblock button_list %}
+  </div>
+  <table class="table" id="data">
+    <thead>
+      {% block column %}
+      {% endblock column %}
+
+    </thead>
+    <tbody>
+      {% block row %}
+      {% endblock row %}
+    </tbody>
+  </table>
+</div>
+<!-- End -->
+
+{% endblock content %}
+
+{% block javascript %}
+
+<script src="{% static 'libs/DataTableLib/JSZip-2.5.0/jszip.min.js'%}"></script>
+<script src="{% static 'libs/DataTableLib/pdfmake-0.2.7/pdfmake.min.js'%}"></script>
+<script src="{% static 'libs/DataTableLib/pdfmake-0.2.7/vfs_fonts.js'%}"></script>
+<script src="{% static 'libs/DataTableLib/DataTables-1.13.4/js/jquery.dataTables.min.js'%}"></script>
+<script src="{% static 'libs/DataTableLib/Buttons-2.3.6/js/dataTables.buttons.min.js'%}"></script>
+<script src="{% static 'libs/DataTableLib/Buttons-2.3.6/js/buttons.html5.min.js'%}"></script>
+<script src="{% static 'libs/DataTableLib/Responsive-2.4.1/js/dataTables.responsive.min.js'%}"></script>
+<script src="{% static 'libs/DataTableLib/Scroller-2.1.1/js/dataTables.scroller.min.js'%}"></script>
+
+
+{% comment %} <script type="application/javascript">
+  $(document).ready(function(){
+    $('#data').DataTable({
+      "paging": true,
+      "lengthMenu": [5, 10, 15, 20],  // Opciones de número de registros por página
+      "pageLength": 5  // Mostrar 5 registros por página de forma predeterminada
+    });
+    
+  })
+</script> {% endcomment %}
+
+  {% block extras %}
+
+  {% endblock extras %}
+
+{% endblock javascript %}

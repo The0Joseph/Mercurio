@@ -1,0 +1,23 @@
+{% extends 'listBase.html' %}
+{% load static %}
+
+{% block column %}
+
+    <tr>
+        <th scope="col" class="border-0 bg-light">
+            <div class="p-2 px-3 text-uppercase">{{titulo}} | {{date_now}}</div>
+        </th>
+        <th scope="col" class="border-0 bg-light">
+            <div class="py-2 text-uppercase"></div>
+        </th>
+    </tr>
+
+{% endblock column %}
+
+{% block row %}
+
+{% endblock row %}
+
+{% block extras %}
+    <script src="{% static 'js/categoria/list.js'%}"></script>
+{% endblock extras %}

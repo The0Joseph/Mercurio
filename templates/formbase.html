@@ -1,0 +1,103 @@
+{% extends 'body.html' %}
+
+{% block content %}
+  <!-- input agregar -->
+  <div class="row">
+    <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
+      <div class="text-left mb-4">
+        <a href="{{list_url}}"><i class="fa-solid fa-arrow-left-long"></i>&nbsp;Atras</a>
+      </div>
+      <div class="mb-4 h5">{{ titulo }}</div>
+      <form method="post" action="." enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="{{action}}">
+        {% comment %} Alerta de boootstrap {% endcomment %}
+        {% comment %} {% if form.errors %}
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+
+            <strong>Error</strong>
+            <ul>
+              {% for campo in form %}
+              
+                {% for error in campo.errors %}
+                  <li>{{error}}</li>
+                {% endfor %}
+  
+              {% endfor %}
+            </ul>
+
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endif %} {% endcomment %}
+          {% for field in form.visible_fields %}
+          <div class="input-group mb-4 border rounded-pill p-2">
+        
+              {{ field }}
+            
+           </div>       
+          {% endfor %}
+            {% comment %} <input type="text" placeholder="Categoria" aria-describedby="button-addon3" class="form-control border-0" /> {% endcomment %}
+          <div class="input-group-append border-0 float-right">
+            <button type="submit" id="button-addon3" type="button" class="btn btn-dark px-4 rounded-pill"><i class="fa fa-plus mr-2"></i>Agregar</button>
+          </div>
+        
+      </form>
+    </div>
+  </div>
+  <!-- end input agregar -->
+{% endblock %}
+
+{% block javascript %}
+<script  type="application/javascript">
+  $(document).ready(function(){
+    $('form').on('submit', function(e){
+      e.preventDefault();
+      
+      {% comment %} let parameters = $(this).serializeArray();  {% endcomment %}
+      let parameters = new FormData(this)
+      console.log(parameters)
+     $.ajax({
+        url: window.location.pathname,
+        type: 'POST',
+        data: parameters,
+        dataType: 'json',
+        processData: false,
+        contentType: false
+      })
+      .done(function(data){
+
+        if (!data.hasOwnProperty('error')){
+          location.href = '{{ list_url }}';
+          return false;
+        }
+        mensajeError(data.error)
+
+      })
+      .fail(function(jqXHR, textStatus, errorThrown){
+        alert(textStatus + ' '+ errorThrown)
+      })
+    })
+  })
+
+</script>
+
+{% comment %} {% if form.errors %}
+  let errores = '';
+  {% for campo in form %}
+                
+    {% for error in campo.errors %}
+      errores += '{{error}}\n';
+    {% endfor %}
+
+  {% endfor %}
+{% endif %}
+
+Swal.fire({
+  icon: 'error',
+  title: 'Error!',
+  text: errores,
+}) {% endcomment %}
+
+{% endblock %}

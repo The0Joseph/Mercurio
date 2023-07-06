@@ -1,0 +1,134 @@
+{% extends 'body.html' %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block head %}
+  
+
+  <link href="{% static 'libs/select2-4.0.13/css/select2.min.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css">
+{% endblock head %}
+
+{% block content %}
+  <!-- input agregar -->
+  <div class="row">
+    <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
+      <div class="text-left mb-4">
+        <a href="{{list_url}}"><i class="fa-solid fa-arrow-left-long"></i>&nbsp;Atras</a>
+      </div>
+      <div class="mb-4 h5">{{ titulo }}</div>
+      <form method="post" action="." enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="">Categorias</label>
+          {{form.cate}}
+        </div>
+        <div class="form-group">
+          <label for="">Productos</label>
+          {{form.prod}}
+        </div>
+        <div class="form-group">
+          <label for="">Buscar</label>
+          {{form.search }}
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- end input agregar -->
+{% endblock %}
+
+{% block javascript %}
+
+
+<script src="{% static 'libs/select2-4.0.13/js/select2.min.js' %}"></script>
+<script src="{% static 'libs/select2-4.0.13/js/i18n/es.js' %}"></script>
+
+<script type="application/javascript">
+  $(document).ready(function(){
+
+    $('.select2').select2({
+      theme: 'bootstrap4',
+      language: 'es'
+    })
+
+    let selectProductos = $('select[name="prod"]');
+
+    $('select[name="cate"]').on('change', function(){
+      
+      let id = $(this).val();
+      
+      let options = '<option>----------------</option>';
+
+      if (id === ''){
+        selectProductos.html(options)
+        return false
+      }
+      $.ajax({
+        url: window.location.pathname,
+        type: 'POST',
+        data: {
+          'action': 'search_product',
+          'id': id
+        },
+        dataType: 'json',
+      })
+      .done(function(data){
+
+        if (!data.hasOwnProperty('error')){
+          // Limpiar el select de productos con html() y no se muestre los datos agregados, anteriores
+          selectProductos.html('').select2({
+            theme: 'bootstrap4',
+            language: 'es',
+            data: data
+          })
+          // console.log(data) 
+          /*$.each(data, function(key, value){
+            options += `<option value="${value.key}">${value.name}</option>`;
+          })*/
+          return false;
+        }
+        mensajeError(data.error)
+
+      })
+      .fail(function(jqXHR, textStatus, errorThrown){
+        alert(textStatus + ' '+ errorThrown)
+      })
+      .always(function(data){
+        //Una ves que se termine el proceso con el componente selectProductos, se va llenar de datos con html 
+        // selectProductos.html(options)
+      })
+      
+    })
+
+
+        
+    $('select[name="search"]').select2({
+      theme: 'bootstrap4',
+      language: 'es',
+      ajax: {
+        url: window.location.pathname,
+        type: 'POST',
+        delay:250,
+        data: function(params){
+          let queryParameters ={
+            term: params.term,
+            action: 'autocomplete'
+          }
+          return queryParameters
+        },
+        processResults: function (data) {
+          return {
+            results: data
+          };
+        },
+      },
+      placeholder: 'Buscar alguna categoria',
+      minimumInputLength: 1,
+    })
+
+  })
+
+
+</script>
+
+{% endblock %}

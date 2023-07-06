@@ -1,0 +1,29 @@
+Encender servidor
+python manage.py runserver
+
+Hacer Migraciones 
+python manage.py makemigrations 
+
+Realizar migracion 
+python manage.py migrate
+
+
+Obtener "pluging" del proyecto 
+pip freeze > requeriments.txt
+
+Instalar requerimients.txt al proyecto 
+pip install -r requirements.txt
+
+
+Crear un entorno virtual
+python -m venv .venv
+
+Activar entorno virtual 
+source .venv/Scripts/activate
+
+Crear Json para guardar data
+python manage.py dumpdata --indent 2 th services payment cliente user > db.json
+python -Xutf8 manage.py dumpdata --indent 2  > db.json
+
+Subir la data del Json al DB
+python manage.py loaddata db.json

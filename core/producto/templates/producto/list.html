@@ -1,0 +1,49 @@
+{% extends 'listBase.html' %}
+{% load static %}
+
+
+{% block column %}
+  <tr>
+    <th scope="col" class="border-0 bg-light" data-priority="1"> <!--data-priority="1" -->
+      <div class="p-2 px-3 text-uppercase">{{titulo}}</div>
+    </th>
+    <th scope="col" class="border-0 bg-light">
+      <div class="py-2 text-uppercase">Ruta</div>
+    </th>
+    <th scope="col" class="border-0 bg-light" data-priority="2">
+      <div class="py-2 text-uppercase" ></div> <!-- data-priority="2" -->
+    </th>
+  </tr>
+{% endblock column %}
+
+{% block row %}
+  {% comment %} {% for c in categorias %}
+        <tr>
+          <td scope="row">
+            <div class="p-2">
+              <img src="https://bootstrapious.com/i/snippets/sn-cart/product-3.jpg" alt="" width="70" class="img-fluid rounded shadow-sm" />
+              <div class="ml-3 d-inline-block align-middle">
+                <h5 class="mb-0"><p href="#" class="text-dark d-inline-block">{{ c.name }}</p></h5><span class="text-muted font-weight-normal font-italic d-block">{{ c.status }}</span>
+              </div>
+            </div>
+          </td>
+          <td class="align-middle">
+            <div class="d-flex">
+              <div class="m-2">
+                <a href="{% url 'Categoria_edit' c.id %}" class="btn btn-warning"><i class="fa-solid fa-pen-to-square"></i></a>
+              </div>
+              <div class="m-2">
+                <a href="{% url 'Categoria_delete' c.id %}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+              </div>
+            </div>
+          </td>
+        </tr>
+      {% endfor %} {% endcomment %}
+{% endblock row %}
+
+
+{% block extras %}
+
+  <script src="{% static 'js/producto/list.js'%}"></script>
+
+{% endblock extras %}

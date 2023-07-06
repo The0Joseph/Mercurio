@@ -1,0 +1,68 @@
+{% extends 'listBase.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block button_list %}
+    <div class="">
+        <button type="button" id="button-addon3" class="btn btn-dark px-4 rounded-pill btnAdd"><i class="fa fa-plus mr-2"></i>Agregar</button>
+    </div>
+{% endblock button_list %}
+
+{% block column %}
+  <tr>
+    <th scope="col" class="border-0 bg-light" data-priority="1"> <!--data-priority="1" -->
+      <div class="p-2 px-3 text-uppercase">{{titulo}}</div>
+    </th>
+    <th scope="col" class="border-0 bg-light" data-priority="3">
+      <div class="py-2 text-uppercase">DNI</div>
+    </th>
+    <th scope="col" class="border-0 bg-light">
+      <div class="py-2 text-uppercase">Dirección</div>
+    </th>
+    <th scope="col" class="border-0 bg-light" data-priority="2">
+      <div class="py-2 text-uppercase" ></div> <!-- data-priority="2" -->
+    </th>
+  </tr>
+{% endblock column %}
+
+{% block row %}
+
+{% endblock row %}
+
+
+{% block extras %}
+
+  <script src="{% static 'js/cliente/list.js'%}"></script>
+
+  <!-- Modal -->
+    <div class="modal fade" id="modalView" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form method="post" action="." enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{entity}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="action" value="add">
+                        <input type="hidden" name="id" value="0">
+                        {% for field in form.visible_fields %}
+                            <label class="pt-2" for="{{field.name}}">{{field.label}}</label>
+                            {{ field | add_class:"form-control"  }}
+                        {% comment %} <div class="input-group border rounded-pill">
+                        </div>        {% endcomment %}
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock extras %}

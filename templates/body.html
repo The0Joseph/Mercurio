@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load active_link_tags %}
+
+{% block head %}
+{% comment %} <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet"> {% endcomment %}
+{% endblock head %}
+    
+{% block body %}
+<body>
+    <div class="px-4 px-lg-0">
+        <div class="pb-5 mt-5">
+            <div class="container">
+                
+                <div class="m-2 d-flex justify-content-between">
+                    {% if request.user.is_authenticated %}
+                        <h5>
+                            <img class="img-fluid " src="{{ request.user.get_image }}" alt="" width="35px">
+                            &nbsp; {{request.user.username}}
+                        </h5>
+                        <a href="{% url 'logout' %}" class="btn btn-secondary">Cerrar Sesión</a>
+                    {% else %}
+                        <h5><i class="fa-solid fa-user-astronaut" id="astronaut_user"></i>&nbsp; <a href="{% url 'login'%}">Iniciar sesión</a></h5>
+                    {% endif %}
+                </div>
+                <div>
+                    <ul class="nav nav-tabs">
+                      <li class="nav-item ">
+                        <a href="{% url 'home' %}" class="nav-link" href="#"><i class="fa-solid fa-house"></i>&nbsp;Inicio</a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="{% url 'producto:Producto_list' %}" class="nav-link {% active_link 'producto:Producto_list' %}" href="#"><i class="fa-solid fa-box"></i>&nbsp;Productos</a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="{% url 'producto:Categoria_list' %}" class="nav-link {% active_link 'producto:Categoria_list' %}" href="#"><i class="fa-solid fa-table-cells-large"></i>&nbsp;Categorias</a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="{% url 'producto:cliente' %}" class="nav-link {% active_link 'producto:cliente' %}"><i class="fa-solid fa-users"></i>&nbsp;Clientes</a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="{% url 'producto:Venta_create' %}" class="nav-link {% active_link 'producto:Venta_create' %}"><i class="fa-solid fa-cart-shopping"></i>&nbsp;Ventas</a>
+                      </li>
+                      <!--
+                        <li class="nav-item">
+                          <a class="nav-link disabled">Disabled</a>
+                        </li>
+                      -->
+                    </ul>
+                  </div>
+
+                {% block content %}
+                
+                {% endblock content %}
+
+            </div>
+        </div>
+    </div>
+    {% comment %} <script src="{% static 'lib/js/jquery-3.3.1.slim.min.js' %}"></script> {% endcomment %}
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="{% static 'libs/js/bootstrap.bundle.min.js' %}"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.7.12/sweetalert2.all.min.js"></script>
+    <script src="{% static 'js/utils.js' %}"></script>
+    <script>
+
+        {% if messages %}
+        
+            let html = '<p>';
+
+            {% for message in messages %}
+            
+                html += '{{message}}<br>';
+
+            {% endfor %}
+
+            html += '</p>';
+
+            Swal.fire({
+                title: 'Error!',
+                html: html,
+                icon: 'error'
+            })
+
+        {% endif %}
+
+    </script>
+    
+</body>
+
+{% endblock body %}
