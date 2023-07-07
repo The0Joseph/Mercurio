@@ -2,7 +2,7 @@
 from django.views.generic import CreateView
 from core.producto.forms import SaleForm
 
-from core.producto.models import Sale
+from core.producto.models import Sale, producto
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from core.producto.mixins import ValidatePermissionRequiredMixin
@@ -34,12 +34,23 @@ class SaleCreateView(LoginRequiredMixin,ValidatePermissionRequiredMixin,CreateVi
             if action == 'add':
                 form = self.get_form()
                 data = form.save()
+            elif action == 'searchProductos':
+                data=[]
+                productosFilter = producto.objects.filter(name__icontains=request.POST['term'])
+                for i in productosFilter[0:1]:
+                    productoJson = i.toJSON()
+                    productoJson['text'] = i.name
+                    data.append(productoJson)
+                    # data.append({
+                    #     'id':i.id,
+                    #     'text':i.name
+                    # })
             else:
                 data['error'] = 'Se ha producido un error al crear una categoria'
         except Exception as e:
             data['error'] = str(e)
 
-        return JsonResponse(data)
+        return JsonResponse(data, safe=False)
     
     # Esta funcion te permite agregar datos presentado en pantalla
     def get_context_data(self, **kwargs):

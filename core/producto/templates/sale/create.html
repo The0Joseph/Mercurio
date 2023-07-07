@@ -28,7 +28,8 @@
                 <div class="card-body">
                     {% comment %} Buscador {% endcomment %}
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control input-group" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+                        {% comment %} <input type="text" name="searchProductos" class="form-control input-group" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2"> {% endcomment %}
+                        <select name="searchProductos" id=""></select>
                         <div class="input-group-append">
                           <button class="btn btn-danger" type="button" id="button-addon2"><i class="fa-solid fa-xmark text-light"></i></button>
                         </div>
@@ -80,7 +81,7 @@
                     </div>
                     <div class="from-group">
                         <label>Calculando IVA:</label>
-                        <input class="form-control" type="text" readonly value="00.00">
+                        <input name="iva_calculado" class="form-control" type="text" readonly value="00.00">
                     </div>
                     <div class="from-group">
                         <label>Total:</label>
@@ -117,7 +118,7 @@
     <!-- Popperjs -->
     <script src="{% static 'libs/tempus-dominus-master/js/poopers.js' %}"></script>
     <!-- touchspin-master -->
-    <script src="{% static 'lib/bootstrap-touchspin-master/jquery.bootstrap-touchspin.min.js' %}"></script>
+    <script src="{% static 'libs/bootstrap-touchspin-master/jquery.bootstrap-touchspin.min.js' %}"></script>
 
     <script src="{% static 'js/sale/list.js'%}"></script>
 

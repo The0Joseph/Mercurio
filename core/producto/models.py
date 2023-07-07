@@ -75,10 +75,12 @@ class producto(models.Model):
     
     def toJSON(self):
         # model_to_dict() se utiliza para convertir un objeto de modelo en un diccionario de Python.
-        item = model_to_dict(self, exclude={'figura'})
+        item = model_to_dict(self)
+        item['cat'] = self.categoria_foreign.toJSON()
         # el or sive como "if" ya que lo que digo es que si no tiene self.get_image() colocame despues del "or"
         # item['figura'] = self.get_image() or '{}{}'.format(STATIC_URL, 'img/Dado.png')
         item['figura'] = self.get_image()
+        item['pvp'] = format(self.pvp, '.2f')
         return item
     
     class Meta:
