@@ -23,3 +23,23 @@ function mensajeError(obj){
       })
 }
 
+//function alerta eliminar
+
+function alerta_Eliminar(context, callback){
+    Swal.fire({
+        title: '¿Estás seguro de eliminar ' + context + '?',
+        text: "Al aceptar esta acción se procede a eliminar " + context ,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'No',
+        confirmButtonText: 'Sí'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            callback();
+        }
+
+    })
+}
+

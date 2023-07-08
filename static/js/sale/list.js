@@ -1,3 +1,4 @@
+let tablaProductos;
 let verts = {
     items : {
         cli: '',
@@ -11,8 +12,8 @@ let verts = {
         let subtotal = 0.00;
         let iva = $('input[name="iva"]').val();
         $.each(this.items.productos, function(pos, dic){
-            console.log(pos)
-            console.log(dic)
+            // console.log(pos)
+            // console.log(dic)
             dic.subtotal = dic.cant * parseFloat(dic.pvp);
             subtotal += dic.subtotal;
         })
@@ -29,7 +30,7 @@ let verts = {
     },
     list: function(){
         this.calculate_invoice();
-        $('#data').DataTable({
+        tablaProductos = $('#data').DataTable({
             responsive: true,
             autoWidth: false,
             destroy: true,
@@ -41,7 +42,7 @@ let verts = {
                 {'data': 'name'},
                 {'data': 'cat.name'},
                 {'data': 'pvp'},
-                {'data': 'cant'},
+                {'data': 'cant', width: "130px"},
                 {'data': 'subtotal'},
             ],
             columnDefs: [
@@ -66,7 +67,7 @@ let verts = {
                     class: 'text-center',
                     orderable: false,
                     render: function(data, type, row){
-                        return '<input type="text" name="cant" class="form-control" autocomplete="off" value="'+data+'">';
+                        return '<input type="text" name="cant" class="form-control input-sm text-center" autocomplete="off" value="'+data+'">';
                     }
                 },
                 {
@@ -77,7 +78,14 @@ let verts = {
                         return 'S/' + parseFloat(data).toFixed(2)
                     }
                 },
-            ]
+            ],
+            rowCallback: function( row, data ) {
+                $(row).find('input[name="cant"]').TouchSpin({
+                    min: 1,
+                    max: 1000000,
+                    step: 1,
+                })
+            }
         });
     },
     add: function(item){
@@ -158,5 +166,29 @@ $(document).ready(function(){
         // verts.list();
 
         $(this).val('').trigger('change.select2')
+    })
+
+    $('.btndeleteall').on('click',function () {
+        alerta_Eliminar('a todos los productos', function () {
+            verts.items.productos = [];
+            verts.list()
+        });
+    })
+
+    $('#data tbody')
+    .on('click', 'a[rel="remove"]', function () {
+        let tr = tablaProductos.cell($(this).closest('td','li')).index();
+        verts.items.productos.splice(tr.row, 1);
+        verts.list();
+    })
+
+    .on('change keyup', 'input[name="cant"]', function(){
+      let cant = parseInt($(this).val())  
+      let tr = tablaProductos.cell($(this).closest('td','li')).index(); // obtengo el numero de la fila donde se esta haciendo un change(dando click en el botón de añadir un producto mas o restarlo)
+      console.log(tr)
+      verts.items.productos[tr.row].cant = cant
+      verts.calculate_invoice();
+      // selecciona la sexta celda (td:eq(5)) en la fila correspondiente a "tr.row" en la tabla "tablaProductos".
+      $('td:eq(5)', tablaProductos.row(tr.row).node()).html('S/ ' + verts.items.productos[tr.row].subtotal.toFixed(2));
     })
 })
