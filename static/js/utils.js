@@ -43,3 +43,26 @@ function alerta_Eliminar(context, callback){
     })
 }
 
+function submit_ajax(url, parameters, callback){
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: parameters,
+        dataType: "json",
+        processData: false,
+        contentType: false
+    })
+    .done(function(data){
+
+        if (!data.hasOwnProperty('error')){
+            callback();
+            return false
+        }
+        mensajeError(data.error)
+
+    })
+    .fail(function(jqXHR, textStatus, errorThrown){
+        alert(textStatus + ' '+ errorThrown)
+    })
+}
+

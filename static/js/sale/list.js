@@ -96,8 +96,6 @@ let verts = {
 
 $(document).ready(function(){
 
-    
-
     $('.select2').select2({
         theme:'bootstrap4',
         language: 'es'
@@ -181,7 +179,6 @@ $(document).ready(function(){
         verts.items.productos.splice(tr.row, 1);
         verts.list();
     })
-
     .on('change keyup', 'input[name="cant"]', function(){
       let cant = parseInt($(this).val())  
       let tr = tablaProductos.cell($(this).closest('td','li')).index(); // obtengo el numero de la fila donde se esta haciendo un change(dando click en el botón de añadir un producto mas o restarlo)
@@ -191,4 +188,25 @@ $(document).ready(function(){
       // selecciona la sexta celda (td:eq(5)) en la fila correspondiente a "tr.row" en la tabla "tablaProductos".
       $('td:eq(5)', tablaProductos.row(tr.row).node()).html('S/ ' + verts.items.productos[tr.row].subtotal.toFixed(2));
     })
+
+
+    $('form').on('submit', function (e) {
+        e.preventDefault();
+
+        // Asignando datos
+        verts.items.date_joined = $('input[name="date_joined"]').val();
+        verts.items.cli = $('select[name="cli"]').val();
+
+        let parameters = new FormData()
+        parameters.append('action', $('input[name="action"]').val());
+        parameters.append('verts', JSON.stringify(verts.items)); // verts.items nesecita ser tranformado a json para enviarlo al view
+
+        console.log(JSON.stringify(verts.items))
+
+        submit_ajax(window.location.pathname, parameters, function () {
+            location.href = ''; // Redireciona a la url almacenada en la variable list_url
+        })
+
+        // console.log(parameters)
+    });
 })

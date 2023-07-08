@@ -1,8 +1,9 @@
 
+import json
 from django.views.generic import CreateView
 from core.producto.forms import SaleForm
 
-from core.producto.models import Sale, producto
+from core.producto.models import Sale, producto, DetSale
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from core.producto.mixins import ValidatePermissionRequiredMixin
@@ -14,11 +15,13 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
+from django.db import transaction
+
 class SaleCreateView(LoginRequiredMixin,ValidatePermissionRequiredMixin,CreateView):
     model = Sale
     form_class = SaleForm
     template_name= 'sale/create.html'
-    success_url = reverse_lazy('producto:Categoria_list')
+    success_url = reverse_lazy('home')
     permission_required = 'producto.add_sale'
 
     @method_decorator(csrf_exempt)
@@ -32,8 +35,28 @@ class SaleCreateView(LoginRequiredMixin,ValidatePermissionRequiredMixin,CreateVi
             action = request.POST['action']
             
             if action == 'add':
-                form = self.get_form()
-                data = form.save()
+                with transaction.atomic():
+                    verts = json.loads(request.POST['verts']) #Convertir str a json con loads
+                    # print(verts)
+
+                    sale = Sale()
+                    sale.date_joined = verts['date_joined']
+                    sale.cli_id = verts['cli']
+                    sale.subtotal = float(verts['subtotal'])
+                    sale.iva = float(verts['iva'])
+                    sale.total = float(verts['total'])
+                    sale.save()
+
+                    #Iterando los productos 
+                    for i in verts['productos']:
+                        detalleVenta = DetSale()
+                        detalleVenta.sale_id = sale.id
+                        detalleVenta.prod_id = i['id']
+                        detalleVenta.price = float(i['pvp'])
+                        detalleVenta.cant = int(i['cant'])
+                        detalleVenta.subtotal = float(i['subtotal'])
+                        detalleVenta.save()
+
             elif action == 'searchProductos':
                 data=[]
                 productosFilter = producto.objects.filter(name__icontains=request.POST['term'])
@@ -56,6 +79,6 @@ class SaleCreateView(LoginRequiredMixin,ValidatePermissionRequiredMixin,CreateVi
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = 'Creación de Ventas'
-        context['entity'] = 'add'
+        context['action'] = 'add'
         context['list_url'] = self.success_url
         return context    

@@ -18,87 +18,88 @@
 {% endblock head %}
 
 {% block content %}
-
-    <div class="row row-cols-2 mt-4 ">
-        <div class="col-12 col-lg-8 mb-1">
-            <div class="card">
-                <div class="card-header bg-warning font-weight-bold">
-                  Detalle de productos
-                </div>
-                <div class="card-body">
-                    {% comment %} Buscador {% endcomment %}
-                    <div class="input-group mb-3">
-                        {% comment %} <input type="text" name="searchProductos" class="form-control input-group" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2"> {% endcomment %}
-                        <select name="searchProductos" id=""></select>
-                        <div class="input-group-append">
-                          <button class="btn btn-danger" type="button" id="button-addon2"><i class="fa-solid fa-xmark text-light"></i></button>
+    <form method="post">
+        <div class="row row-cols-2 mt-4 ">
+            <div class="col-12 col-lg-8 mb-1">
+                <div class="card">
+                    <div class="card-header bg-warning font-weight-bold">
+                      Detalle de productos
+                    </div>
+                    <div class="card-body">
+                        {% comment %} Buscador {% endcomment %}
+                        <div class="input-group mb-3">
+                            <input type="hidden" name="action" value="{{action}}">
+                            <select name="searchProductos" id=""></select>
+                            <div class="input-group-append">
+                              <button class="btn btn-danger" type="button" id="button-addon2"><i class="fa-solid fa-xmark text-light"></i></button>
+                            </div>
+                        </div>
+    
+                        <hr class="pt-3 pb-1">
+    
+                        <button class="btn btn-danger btn-sm mb-3 btndeleteall">Borrar todos los productos &nbsp;<i class="fa-solid fa-trash-can"></i></button>
+    
+                        <div>
+                            <table class="table" id="data">
+                                <thead>
+                                    <tr>
+                                        <th>Eliminar</th>
+                                        <th>Producto</th>
+                                        <th>Categoría</th>
+                                        <th>PVP</th>
+                                        <th>Cantidad</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+    
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-
-                    <hr class="pt-3 pb-1">
-
-                    <button class="btn btn-danger btn-sm mb-3 btndeleteall">Borrar todos los productos &nbsp;<i class="fa-solid fa-trash-can"></i></button>
-
-                    <div>
-                        <table class="table" id="data">
-                            <thead>
-                                <tr>
-                                    <th>Eliminar</th>
-                                    <th>Producto</th>
-                                    <th>Categoría</th>
-                                    <th>PVP</th>
-                                    <th>Cantidad</th>
-                                    <th>Subtotal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
+                  </div>
+            </div>
+            <div class="col-12 col-lg-4 mt-1">
+                <div class="card">
+                    <div class="card-header bg-info text-light font-weight-bold">
+                      Datos de la factura
                     </div>
-                </div>
-              </div>
+                    <div class="card-body">
+                        <div class="from-group ">
+                            <label for="{{form.name}}">Fecha de venta:</label>
+                            {{form.date_joined | add_class:"form-control mb-2"}}
+                        </div>
+                        <div class="from-group ">
+                            <label>Cliente:</label>
+                            {{form.cli | add_class:"form-control"}}
+                        </div>
+                        <div class="from-group">
+                            <label>Sub Total:</label>
+                            {{form.subtotal | add_class:"form-control"}}
+                        </div>
+                        <div class="from-group">
+                            <label>IVA:</label>
+                            {{form.iva | add_class:"form-control"}}
+                        </div>
+                        <div class="from-group">
+                            <label>Calculando IVA:</label>
+                            <input name="iva_calculado" class="form-control" type="text" readonly value="00.00">
+                        </div>
+                        <div class="from-group">
+                            <label>Total:</label>
+                            {{form.total | add_class:"form-control"}}
+                        </div>
+                    </div>
+                  </div>
+            </div>
         </div>
-        <div class="col-12 col-lg-4 mt-1">
-            <div class="card">
-                <div class="card-header bg-info text-light font-weight-bold">
-                  Datos de la factura
-                </div>
-                <div class="card-body">
-                    <div class="from-group ">
-                        <label for="{{form.name}}">Fecha de venta:</label>
-                        {{form.date_joined | add_class:"form-control mb-2"}}
-                    </div>
-                    <div class="from-group ">
-                        <label>Cliente:</label>
-                        {{form.cli | add_class:"form-control"}}
-                    </div>
-                    <div class="from-group">
-                        <label>Sub Total:</label>
-                        {{form.subtotal | add_class:"form-control"}}
-                    </div>
-                    <div class="from-group">
-                        <label>IVA:</label>
-                        {{form.iva | add_class:"form-control"}}
-                    </div>
-                    <div class="from-group">
-                        <label>Calculando IVA:</label>
-                        <input name="iva_calculado" class="form-control" type="text" readonly value="00.00">
-                    </div>
-                    <div class="from-group">
-                        <label>Total:</label>
-                        {{form.total | add_class:"form-control"}}
-                    </div>
-                </div>
-              </div>
+        <div class="d-flex">
+            
+            <button class="btn btn-danger mr-3" type="button"><i class="fa-solid fa-xmark text-light"></i>&nbsp;Cancelar</button>
+            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-save"></i>&nbsp;Guardar</button>
+    
         </div>
-    </div>
-    <div class="d-flex">
-        
-        <button class="btn btn-danger mr-3" type="button"><i class="fa-solid fa-xmark text-light"></i>&nbsp;Cancelar</button>
-        <button class="btn btn-primary" type="button"><i class="fa-solid fa-save"></i>&nbsp;Guardar</button>
-
-    </div>
+    </form>
                 
 {% endblock content %}
 
