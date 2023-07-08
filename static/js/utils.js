@@ -66,3 +66,11 @@ function submit_ajax(url, parameters, callback){
     })
 }
 
+function message_error(context){
+    Swal.fire(
+        'Error',
+        context,
+        'error'
+      )
+}
+

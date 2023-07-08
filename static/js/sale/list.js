@@ -130,6 +130,7 @@ $(document).ready(function(){
     $("select[name='searchProductos']").select2({
         theme: 'bootstrap4',
         language: 'es',
+        selectOnClose: true,
         ajax: {
             url: window.location.pathname,
             type: 'POST',
@@ -163,10 +164,16 @@ $(document).ready(function(){
         verts.add(data)
         // verts.list();
 
-        $(this).val('').trigger('change.select2')
+        $(this).val('').trigger('change.select2');
+
+        setTimeout(
+            ()=>{
+                    $(this).select2("open")
+                }, 500)
     })
 
     $('.btndeleteall').on('click',function () {
+        if(verts.items.productos.length === 0) return false;
         alerta_Eliminar('a todos los productos', function () {
             verts.items.productos = [];
             verts.list()
@@ -190,8 +197,16 @@ $(document).ready(function(){
     })
 
 
+
     $('form').on('submit', function (e) {
         e.preventDefault();
+
+
+        // /Verificando si productos está vacio
+        if(verts.items.productos.length === 0){
+            message_error('Se nesecita tener productos')
+            return false
+        }
 
         // Asignando datos
         verts.items.date_joined = $('input[name="date_joined"]').val();
@@ -201,12 +216,13 @@ $(document).ready(function(){
         parameters.append('action', $('input[name="action"]').val());
         parameters.append('verts', JSON.stringify(verts.items)); // verts.items nesecita ser tranformado a json para enviarlo al view
 
-        console.log(JSON.stringify(verts.items))
 
         submit_ajax(window.location.pathname, parameters, function () {
-            location.href = ''; // Redireciona a la url almacenada en la variable list_url
+            location.href = '/tables/cliente/'; // Redireciona a la url almacenada en la variable list_url
         })
 
         // console.log(parameters)
     });
+
+    verts.list()
 })
