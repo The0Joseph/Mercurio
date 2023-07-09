@@ -1,0 +1,36 @@
+{% extends 'listBase.html' %}
+{% load static %}
+
+{% block column %}
+  <tr>
+    <th scope="col" class="border-0 bg-light" data-priority="1"> <!--data-priority="1" -->
+      <div class="p-2 px-3 text-uppercase">{{titulo}}</div>
+    </th>
+    <th scope="col" class="border-0 bg-light">
+      <div class="py-2 text-uppercase">Fecha de registro</div>
+    </th>
+    <th scope="col" class="border-0 bg-light">
+      <div class="py-2 text-uppercase">subtotal</div>
+    </th>
+    <th scope="col" class="border-0 bg-light">
+      <div class="py-2 text-uppercase">iva</div>
+    </th>
+    <th scope="col" class="border-0 bg-light">
+      <div class="py-2 text-uppercase">total</div>
+    </th>
+    <th scope="col" class="border-0 bg-light" data-priority="2">
+      <div class="py-2 text-uppercase" ></div> <!-- data-priority="2" -->
+    </th>
+  </tr>
+{% endblock column %}
+
+{% block row %}
+
+{% endblock row %}
+
+
+{% block extras %}
+
+  <script src="{% static 'js/sale/list.js'%}"></script>
+
+{% endblock extras %}

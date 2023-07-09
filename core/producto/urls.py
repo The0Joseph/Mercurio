@@ -3,7 +3,7 @@ from django.urls import path
 from core.producto.views.producto.views import *
 from core.producto.views.categoria.views import *
 from core.producto.views.cliente.views import *
-from core.producto.views.sale.views import SaleCreateView
+from core.producto.views.sale.views import *
 from core.producto.views.test.views import *
 
 app_name = 'producto'
@@ -28,6 +28,7 @@ urlpatterns = [
     path('test/', TestListView.as_view(), name="test"),
     
     # test
+    path('venta/list', SaleListView.as_view(), name="Venta_list"),
     path('venta/create', SaleCreateView.as_view(), name="Venta_create"),
 
 ]

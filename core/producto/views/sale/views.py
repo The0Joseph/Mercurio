@@ -1,6 +1,6 @@
 
 import json
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView
 from core.producto.forms import SaleForm
 
 from core.producto.models import Sale, producto, DetSale
@@ -17,11 +17,51 @@ from django.contrib.auth.decorators import login_required
 
 from django.db import transaction
 
+
+class SaleListView(ListView):
+    model = Sale
+    template_name = "sale/list.html"
+    
+    
+    @method_decorator(csrf_exempt)
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        data = {}
+
+        try:
+            action = request.POST['action']
+            if action == 'salesData':
+                data =[]
+                for i in Sale.objects.all():
+                    data.append(i.toJSON())
+                # print(data)
+            else:
+                data['error'] = 'Ha ocurrido un error'
+
+        except Exception as e:
+            data['error'] = 'Ha ocurrido un error en mostrar la lista de datos de ventas' . str(e)
+            
+        return JsonResponse(data, safe=False)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['titulo'] = 'Listado de Ventas'
+        context['entity'] = 'Ventas'
+        context['list_url'] = reverse_lazy('producto:Venta_list')
+        context['create_url'] = reverse_lazy('producto:Venta_create')
+        return context 
+    
+
+
+
 class SaleCreateView(LoginRequiredMixin,ValidatePermissionRequiredMixin,CreateView):
     model = Sale
     form_class = SaleForm
     template_name= 'sale/create.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('producto:Venta_list')
     permission_required = 'producto.add_sale'
 
     @method_decorator(csrf_exempt)
