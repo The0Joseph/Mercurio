@@ -122,7 +122,13 @@
     <script src="{% static 'libs/tempus-dominus-master/js/poopers.js' %}"></script>
     <!-- touchspin-master -->
     <script src="{% static 'libs/bootstrap-touchspin-master/jquery.bootstrap-touchspin.min.js' %}"></script>
-
+    
     <script src="{% static 'js/sale/create.js'%}"></script>
-
+    
+    <script>
+        // El safe parcea lo datos
+        verts.items.productos = {{det | safe}};
+        verts.list();
+    </script>
+    
 {% endblock javascript %}

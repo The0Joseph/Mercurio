@@ -94,6 +94,7 @@ let verts = {
     }
 }
 
+
 $(document).ready(function(){
 
     $('.select2').select2({
@@ -127,6 +128,32 @@ $(document).ready(function(){
     })
     .val(0.18);
 
+
+    function formatRepo(repo) {
+        if (repo.loading) {
+            return repo.text;
+        }
+    
+        var option = $(
+            '<div class="wrapper container">' +
+            '<div class="row">' +
+            '<div class=" col-md-2 col-sm-2 col-4">' +
+            '<img src="' + repo.figura + '" class="img-fluid img-thumbnail d-block mx-auto rounded" >' +
+            '</div>' +
+            '<div class=" col-md-10 col-sm-10 col-8 text-left shadow-sm">' +
+            //'<br>' +
+            '<p style="margin-bottom: 0;">' +
+            '<b>Nombre:</b> ' + repo.name + '<br>' +
+            '<b>Categoría:</b> ' + repo.cat.name + '<br>' +
+            '<b>PVP:</b> <span class="badge badge-warning">$' + repo.pvp + '</span>' +
+            '</p>' +
+            '</div>' +
+            '</div>' +
+            '</div>');
+    
+        return option;
+    }
+
     $("select[name='searchProductos']").select2({
         theme: 'bootstrap4',
         language: 'es',
@@ -144,7 +171,7 @@ $(document).ready(function(){
                 return queryParameters
             },
             processResults: function (data) {
-                // console.log(data)
+                console.log(data)
                 return {
                     results: data
                 };
@@ -153,6 +180,8 @@ $(document).ready(function(){
           },
           placeholder: 'Buscar alguna categoria',
           minimumInputLength: 1,
+          templateResult: formatRepo,
+
     }).on('select2:select', function(e){
         // console.log(e.params)
         let data  = e.params.data;
@@ -186,6 +215,7 @@ $(document).ready(function(){
         verts.items.productos.splice(tr.row, 1);
         verts.list();
     })
+    
     .on('change keyup', 'input[name="cant"]', function(){
       let cant = parseInt($(this).val())  
       let tr = tablaProductos.cell($(this).closest('td','li')).index(); // obtengo el numero de la fila donde se esta haciendo un change(dando click en el botón de añadir un producto mas o restarlo)
@@ -218,11 +248,11 @@ $(document).ready(function(){
 
 
         submit_ajax(window.location.pathname, parameters, function () {
-            location.href = '/tables/venta/list'; // Redireciona a la url 
+            location.href = '/tablas/venta/list'; // Redireciona a la url 
         })
 
         // console.log(parameters)
     });
 
-    verts.list()
+    // verts.list()
 })

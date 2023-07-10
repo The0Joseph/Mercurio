@@ -30,5 +30,6 @@ urlpatterns = [
     # test
     path('venta/list', SaleListView.as_view(), name="Venta_list"),
     path('venta/create', SaleCreateView.as_view(), name="Venta_create"),
+    path('venta/edit/<int:pk>/', SaleEditView.as_view(), name="Venta_edit"),
 
 ]
