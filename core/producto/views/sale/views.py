@@ -1,6 +1,5 @@
-
 import json
-from django.views.generic import CreateView, ListView, UpdateView
+from django.views.generic import CreateView, ListView, UpdateView, View
 from core.producto.forms import SaleForm
 
 from core.producto.models import Sale, producto, DetSale
@@ -8,7 +7,7 @@ from core.producto.models import Sale, producto, DetSale
 from django.contrib.auth.mixins import LoginRequiredMixin
 from core.producto.mixins import ValidatePermissionRequiredMixin
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.urls import reverse_lazy
 # Decoradores
 from django.utils.decorators import method_decorator
@@ -16,6 +15,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
 from django.db import transaction
+
+import os
+from django.conf import settings
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.contrib.staticfiles import finders
 
 
 class SaleListView(ListView):
@@ -72,7 +77,7 @@ class SaleEditView(LoginRequiredMixin,ValidatePermissionRequiredMixin,UpdateView
     permission_required = 'producto.change_sale'
 
     @method_decorator(csrf_exempt)
-    @method_decorator(login_required)
+    # @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)    
     
@@ -211,3 +216,24 @@ class SaleCreateView(LoginRequiredMixin,ValidatePermissionRequiredMixin,CreateVi
         context['list_url'] = self.success_url
         context['det'] = []
         return context    
+    
+
+class SaleInvoicePDFview(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            template = get_template('sale/invoice.html') #ruta del template, y devuelve el objecto a base del template dado
+            context = {'title': 'Esto es uan plantilla para el pdf o este es el pdf perra'}
+            
+            # Create a Django response object, and specify content_type as pdf
+            response = HttpResponse(content_type='application/pdf')
+            # response['Content-Disposition'] = 'attachment; filename="report.pdf"' #Esto es para descargar el pdf automaticamente
+            
+            html = template.render(context)
+
+            # create a pdf
+            pisa_status = pisa.CreatePDF(html, dest=response) # , link_callback=link_callback para archivos estaticos
+
+            return response #Se devuelve un objecto httpresponse
+        except Exception as e:
+            pass
+        return HttpResponse(reverse_lazy('producto:Venta_list'))

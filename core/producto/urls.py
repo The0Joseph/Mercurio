@@ -6,6 +6,7 @@ from core.producto.views.cliente.views import *
 from core.producto.views.sale.views import *
 from core.producto.views.test.views import *
 
+
 app_name = 'producto'
 
 urlpatterns = [
@@ -27,9 +28,14 @@ urlpatterns = [
     # test
     path('test/', TestListView.as_view(), name="test"),
     
-    # test
+    # Venta
     path('venta/list', SaleListView.as_view(), name="Venta_list"),
     path('venta/create', SaleCreateView.as_view(), name="Venta_create"),
     path('venta/edit/<int:pk>/', SaleEditView.as_view(), name="Venta_edit"),
+    
+    # PDFs
+    path('venta/invoice/pdf/<int:pk>/', SaleInvoicePDFview.as_view(), name="Venta_invoice_pdf"),
+
+
 
 ]
